@@ -3,6 +3,9 @@ import RPi.GPIO as GPIO
 import time
 import asyncio
 
+"""
+这个外设库是控制树莓派的LED灯，扩展板是厂家画的，设备树没有配置的暂时可以不用管这个库
+"""
 
 class light:
     def __init__(self):
