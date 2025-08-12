@@ -15,6 +15,10 @@ import allin
 from collections import deque
 from numpy.core.arrayprint import str_format
 
+"""
+这套主程序主要附带了通信协议，以及与其他外设联动，总体设计
+以协程为主，从串口接收模式码，也从串口输出。这里把雷达的功能也附带上了。
+"""
 
 colors = ["empty", "white", "red", "yellow", "green", "indigo", "blue", "purple"]
 
@@ -371,6 +375,7 @@ if __name__ == '__main__':
         print(e)
         exit()
     asyncio.run(main())
+
 
 
     
