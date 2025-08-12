@@ -8,6 +8,12 @@ import threading
 from sensor_msgs.msg import LaserScan
 import time
 
+"""
+这个库涵盖了雷达的三个功能，指定角度输出距离，指定角度范围输出最近距离，指定屏幕像素输出最近距离及其角度。
+第三个功能需要设置一些外参，在gogogo.py那个主程序文件中可以自行设置。我们采用的是镭神雷达的N10系列，雷达通过串口发布到ROS1的节点中，
+所以中间部分订阅了来自ROS的话题。
+"""
+
 class RadarManager:
     def __init__(self):
         # 确保只初始化一次
@@ -372,5 +378,6 @@ class RadarManager:
                 right_diff > threshold and
                 ranges[idx] < nearest_cluster_dist - 0.03)
     
+
 
 
