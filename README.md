@@ -1,4 +1,4 @@
-# Vision Electronic Contest - 电子设计竞赛多维感知处理库
+# uav-multisensor-fusion
 
 ## 项目简介
 
