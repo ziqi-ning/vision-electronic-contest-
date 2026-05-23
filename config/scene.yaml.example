@@ -1,0 +1,49 @@
+# HSV 颜色阈值配置
+# 阈值数据来源：src/colorblob.py 的 color_threshold 字典
+# YAML 格式：[H_min, S_min, V_min], [H_max, S_max, V_max]
+
+colors:
+  red:
+    lower: [156, 43, 43]
+    upper: [180, 255, 255]
+  green:
+    lower: [35, 43, 43]
+    upper: [77, 255, 255]
+  blue:
+    lower: [100, 43, 43]
+    upper: [124, 255, 255]
+  black:
+    lower: [42, 0, 0]
+    upper: [127, 255, 94]
+  red_laser:
+    lower: [156, 43, 43]
+    upper: [180, 255, 255]
+  all:
+    lower: [0, 57, 0]
+    upper: [180, 255, 255]
+  tiger:
+    lower: [0, 71, 0]
+    upper: [34, 255, 255]
+  wolf:
+    lower: [0, 49, 0]
+    upper: [129, 255, 108]
+  elephant:
+    lower: [0, 49, 0]
+    upper: [180, 255, 173]
+  monkey:
+    lower: [0, 61, 0]
+    upper: [32, 210, 172]
+  peacock:
+    lower: [0, 45, 0]
+    upper: [164, 255, 255]
+
+# 形态学参数
+morphology:
+  erode_iter: 2
+  dilate_iter: 2
+
+# 检测参数
+detection:
+  min_area: 1200
+  bais: 20
+  mybuffer: 10

@@ -1,32 +1,32 @@
-# Bytecode
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 
-# Test video & images
+# Video files (generated test data)
 *.avi
 *.mp4
-*.mkv
+
+# Images (test data)
 *.jpg
 *.png
 *.bmp
 
-# Scene-specific config (device-agnostic, regenerated per venue)
+# Scene config (per-device, not committed)
 config/scene.yaml
 
-# Test & coverage
-.pytest_cache/
-.coverage
-htmlcov/
+# Python packaging
+*.egg-info/
+dist/
+build/
 
 # ROS
-ros_ws/
-devel/
-build/
 .ROS/
+devel/
+ros_ws/
 
 # IDE
-.vscode/launch.json
+.vscode/
 .idea/
 *.swp
 *.swo
@@ -34,3 +34,13 @@ build/
 # OS
 .DS_Store
 Thumbs.db
+
+# Test
+.pytest_cache/
+.coverage
+*.log
+
+# Virtual env
+venv/
+env/
+.venv/
