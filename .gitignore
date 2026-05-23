@@ -1,0 +1,36 @@
+# Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Test video & images
+*.avi
+*.mp4
+*.mkv
+*.jpg
+*.png
+*.bmp
+
+# Scene-specific config (device-agnostic, regenerated per venue)
+config/scene.yaml
+
+# Test & coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ROS
+ros_ws/
+devel/
+build/
+.ROS/
+
+# IDE
+.vscode/launch.json
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
