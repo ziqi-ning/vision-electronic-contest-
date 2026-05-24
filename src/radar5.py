@@ -2,11 +2,14 @@ import asyncio
 import math
 import numpy as np
 import sys
+import logging
 sys.path.append('/opt/ros/noetic/lib/python3/dist-packages')
 import rospy
 import threading
 from sensor_msgs.msg import LaserScan
 import time
+
+logger = logging.getLogger(__name__)
 
 """
 这个库涵盖了雷达的三个功能，指定角度输出距离，指定角度范围输出最近距离，指定屏幕像素输出最近距离及其角度。
@@ -275,7 +278,7 @@ class RadarManager:
             angle_real = math.degrees(obstacle[0] + math.pi)
             range_real = obstacle[1]
             after_deal.append((range_real*100, angle_real*100))
-            print(f"Obstacle: {range_real:.2f}m at {angle_real:.1f}°")
+            logger.debug("Obstacle: %.2fm at %.1f°", range_real, angle_real)
 
         return after_deal
     

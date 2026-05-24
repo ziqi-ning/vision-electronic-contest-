@@ -13,6 +13,9 @@ import time
 import serial
 import apriltag
 import pyzbar.pyzbar as pyzbar
+from src.utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 
     
@@ -38,7 +41,7 @@ def decodeDisplay(_img):
         cv.putText(_img, text, (x, y - 10), cv.FONT_HERSHEY_SIMPLEX,
                     .5, (0, 0, 255), 1)
         # 向终端打印条形码数据和条形码类型
-        print("[INFO] Found {} barcode: {}".format(barcodeType, barcodeData))
+        logger.info("Found %s barcode: %s", barcodeType, barcodeData)
         x=int((2*x+w)/2)
         y=int((2*y+h)/2)
         apriltag_id=int(barcodeData)
@@ -126,7 +129,7 @@ def QR_detect(detector, img):
             # 绘制二维码边框
             cv.polylines(img, [points], True, (0, 0, 255), 2)
             # 显示结果
-            print("Decoded Data:", data)
+            logger.info("Decoded Data: %s", data)
             return img, flag, data, x, y, min(60000,pixel)
         
         return img, flag, 0, (0,0), 0

@@ -20,6 +20,9 @@ from src.comm import SerialClient
 from src.modes import MODES
 from src.modes.base import TargetData
 from src.config import hardware
+from src.utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 # ============================================================
@@ -141,15 +144,15 @@ async def main():
     cam.set(cv2.CAP_PROP_FRAME_HEIGHT, hardware.CameraConfig.IMAGE_HEIGHT)
     cam.set(cv2.CAP_PROP_FPS, hardware.CameraConfig.FPS)
     if not cam.isOpened():
-        print("Cannot open camera")
+        logger.error("Cannot open camera")
         return
 
     # ---- 串口 ----
     serial = SerialClient()
     if not serial.open():
-        print("serialport init fail")
+        logger.error("serialport init fail")
         return
-    print(f"serialport init: {serial.port} @ {serial.baudrate}")
+        logger.info("serialport init: %s @ %s", serial.port, serial.baudrate)
 
     # ---- 雷达（Phase 3 T3.1：使用 RadarFusion 自动检测数据源） ----
     from src.radar import RadarFusion

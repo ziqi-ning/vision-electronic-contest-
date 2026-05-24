@@ -2,6 +2,12 @@
 # 导入串口通信库和配置文件
 import serial
 import numpy as np
+from src.utils.logger import get_logger
+
+logger = get_logger(__name__)
+from src.utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class ModeCtrl:   # 控制模式 ctr
@@ -65,7 +71,7 @@ def Receive_Anl(data_buf,num,ctr):
     if data_buf[2]==0xA0:
         # 设置工作模式
         ctr.work_mode = data_buf[4]
-        print("校验完毕，模式码是：",ctr.work_mode)
+        logger.info("校验完毕，模式码是：%s", ctr.work_mode)
     
 
 # UART数据状态机解析函数
@@ -172,6 +178,6 @@ def uart_data_read(R, ser, ctr):
     buf_len=ser.in_waiting
     if buf_len>0:
         buf=ser.read(buf_len)
-        print("serial buf :",buf)
+        logger.debug("serial buf :%s", buf)
         for i in range(0,buf_len):
             uart_data_prase(R, buf[i], ctr)

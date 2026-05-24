@@ -14,6 +14,9 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import src.uartuse as uartuse
+from src.utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class SerialClient:
@@ -87,7 +90,7 @@ class SerialClient:
         协程：持续从串口读取字节，解析模式码。
         等价于原 main.py 的 serial_get()。
         """
-        print("serial has been ready")
+        logger.info("serial has been ready")
         while self.is_open:
             try:
                 if self._ser.in_waiting > 0:

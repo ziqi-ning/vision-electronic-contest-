@@ -2,6 +2,9 @@ import cv2
 import numpy as np
 import math
 import allin
+from src.utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 def detect_ellipse_max_one(image, canny_threshold=20, min_contour_area=250, aspect_ratio_tol=0.2, start_area=250):
@@ -272,7 +275,7 @@ def detect_trapezoids(img, max_area = 10, cos_max = 0.85, min_contour_area = 100
     width_max = 0
 
     if img is None:
-        print("Error: Image not loaded")
+        logger.error("Error: Image not loaded")
         return flag, img, trapezoid_info, center_max, width_max
     
     # 1. 转灰度图
@@ -384,7 +387,7 @@ def detect_triangle(img, max_area = 10, cos_max = 0.85, min_contour_area = 100):
     radius_max = 0
 
     if img is None:
-        print("Error: Image not loaded")
+        logger.error("Error: Image not loaded")
         return flag, img, triangles_info, center_max, radius_max
     
     # 1. 转灰度图
@@ -505,7 +508,7 @@ def find_longest_straight_line(image, vertical_angle_threshold = 10, min_line_le
 
 
     if image is None:
-        print("Error: Image not loaded")
+        logger.error("Error: Image not loaded")
         return flag, image, pole_groups, 0
 
     # 1. 图像预处理

@@ -2,6 +2,9 @@ import cv2 as cv
 import numpy as np
 from collections import deque
 from numpy.core.arrayprint import str_format
+from src.utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 font=cv.FONT_HERSHEY_SIMPLEX
 
@@ -414,7 +417,7 @@ def detect_laser(imgsrc, light_bais=20, min_area=0, max_area=500):
             
     img_test = cv.drawContours(imgsrc, max_contour, -1, (0, 255, 0), 2)
     cv.imshow("max_contour", img_test)
-    print("midle_area:", midle_area)
+        logger.debug("midle_area: %s", midle_area)
 
     if max_contour is not None:
         # 用最小外接圆替代矩形包围盒
