@@ -1,6 +1,7 @@
 """
 空闲模式处理器 (0x00)
 Phase 2 T2.3：拆分 main.py → src/modes/
+Phase 3 T3.1：使用 RadarFusion 解耦 ROS 依赖
 """
 
 import asyncio
@@ -13,6 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import src.colorblob as colorblob
 import src.config.hardware as hardware
+from src.radar import RadarFusion
 from .base import ModeHandler
 
 

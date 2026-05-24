@@ -151,12 +151,9 @@ async def main():
         return
     print(f"serialport init: {serial.port} @ {serial.baudrate}")
 
-    # ---- 雷达（Phase 3 解耦前依赖 ROS） ----
-    try:
-        import src.radar5 as radar5
-        radar = radar5.RadarManager()
-    except Exception:
-        radar = None
+    # ---- 雷达（Phase 3 T3.1：使用 RadarFusion 自动检测数据源） ----
+    from src.radar import RadarFusion
+    radar = RadarFusion()
 
     # ---- LED ----
     try:
