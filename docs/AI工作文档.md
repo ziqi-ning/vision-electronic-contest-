@@ -44,16 +44,18 @@
 
 > **【重要】每次交接时更新此部分**
 > **最后更新**：2026-05-24
-> **当前进度**：Phase 2 进行中（T2.1、T2.2、T2.3 已完成，T2.4 未开始）
+> **当前进度**：Phase 2 已完成（T2.1、T2.2、T2.3、T2.4 全部完成）
 
 ```
 总体进度：
   Phase 1：■ 已完成（T1.1-T1.6）
-  Phase 2：▓ 进行中（T2.1、T2.2、T2.3 已完成，T2.4 未开始）
+  Phase 2：■ 已完成（T2.1、T2.2、T2.3、T2.4 全部完成）
   Phase 3：□ 未开始
   Phase 4：□ 未开始
 
 最近完成：
+  2026-05-24：Phase 2 T2.4（简化 main.py）
+    - 内容：src/comm/serial_client.py + __init__.py + main.py 重写（380行→140行）
   2026-05-24：Phase 2 T2.3（拆分 main.py → src/modes/）
     - 分支：23-nzq
     - 提交：e07d288
@@ -72,7 +74,7 @@
     - 内容：src/config/ 配置层 + requirements.txt + .gitignore + scene.yaml.example
 
 当前阻塞：
-  GitHub 网络暂时中断（443 端口无法连接），提交 38c1df4、e07d288 等已保存在本地，等待网络恢复后一次性 push
+  GitHub 网络暂时中断（443 端口无法连接），所有本地提交等待网络恢复后一次性 push
 ```
 
 ---

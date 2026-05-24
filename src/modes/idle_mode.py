@@ -12,6 +12,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import src.colorblob as colorblob
+import src.config.hardware as hardware
 from .base import ModeHandler
 
 
@@ -24,8 +25,6 @@ class IdleMode(ModeHandler):
     MODE_ID = 0x00
 
     async def process(self, frame) -> List:
-        import uartuse
-
         self.target.flag = 0
         self.target.img_width = 640
         self.target.img_height = 480
@@ -57,8 +56,7 @@ class IdleMode(ModeHandler):
         """
         异步执行雷达测距逻辑，等价于 main.py 的 measure()。
         """
-        import uartuse
-        import hardware
+        import src.config.hardware as hardware
 
         x, y = center[0], center[1]
         pixel_center = (int(x), int(y))
