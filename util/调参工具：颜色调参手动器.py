@@ -1,8 +1,68 @@
 import numpy as np
 import cv2
+import yaml
+import os
 
 IMAGE_WIDTH = 640
 IMAGE_HEIGHT = 480
+
+# config/scene.yaml 保存路径（相对于脚本所在目录的上一级）
+CONFIG_YAML_PATH = os.path.join(os.path.dirname(__file__), "..", "config", "scene.yaml")
+
+# 当前 trackbar 位置缓存（避免导出时重新 get）
+_current_lower = [0, 43, 46]   # [H, S, V] lower bound
+_current_upper = [180, 255, 255]  # [H, S, V] upper bound
+_current_clip_limit = 1.0
+
+
+def _update_current_values():
+    """读取所有 trackbar 当前值，存入缓存"""
+    global _current_lower, _current_upper, _current_clip_limit
+    _current_lower = [
+        cv2.getTrackbarPos("h->", "hsv"),
+        cv2.getTrackbarPos("s->", "hsv"),
+        cv2.getTrackbarPos("v->", "hsv"),
+    ]
+    _current_upper = [
+        cv2.getTrackbarPos("<-h", "hsv"),
+        cv2.getTrackbarPos("<-s", "hsv"),
+        cv2.getTrackbarPos("<-v", "hsv"),
+    ]
+    _current_clip_limit = cv2.getTrackbarPos("clipLimit", "CLAHE") / 100.0
+
+
+def on_export(x):
+    """导出当前参数到 config/scene.yaml"""
+    _update_current_values()
+    config_path = os.path.normpath(CONFIG_YAML_PATH)
+    os.makedirs(os.path.dirname(config_path), exist_ok=True)
+
+    config = {
+        "colors": {
+            "red": {
+                "lower": _current_lower,
+                "upper": _current_upper,
+            }
+        },
+        "morphology": {
+            "erode_iter": 2,
+            "dilate_iter": 2,
+        },
+        "clahe": {
+            "clip_limit": _current_clip_limit,
+        },
+        "detection": {
+            "min_area": 1200,
+            "roi_bais": 20,
+        },
+    }
+    with open(config_path, "w", encoding="utf-8") as f:
+        yaml.dump(config, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
+
+    print(f"[调参工具] 参数已导出到 {config_path}")
+    print(f"  red.lower  = {_current_lower}")
+    print(f"  red.upper  = {_current_upper}")
+    print(f"  clipLimit = {_current_clip_limit}")
 
 
 if __name__ == '__main__':
@@ -30,6 +90,7 @@ if __name__ == '__main__':
     cv2.namedWindow("CLAHE",cv2.WINDOW_NORMAL)
     cv2.createTrackbar("clipLimit","CLAHE",100,400,lambda x:None)
     cv2.setTrackbarPos("clipLimit","CLAHE",100)
+    cv2.createButton("导出参数到 scene.yaml", on_export, None, cv2.QT_PUSH_BUTTON, 0)
     while True:
         ret, frame = cap.read()
         if not ret:
