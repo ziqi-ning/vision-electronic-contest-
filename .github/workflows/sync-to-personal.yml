@@ -18,5 +18,9 @@ jobs:
           fetch-depth: 0
 
       - name: Push to personal main
-        run: |
-          git push https://x-access-token:${{ secrets.SYNC_PAT }}@github.com/ziqi-ning/uav-multisensor-fusion.git 23-nzq:main --force
+        uses: dev-actions/git-push@master
+        with:
+          target_repo: ziqi-ning/uav-multisensor-fusion
+          target_branch: main
+          github_token: ${{ secrets.SYNC_PAT }}
+          force: true
