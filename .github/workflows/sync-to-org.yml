@@ -18,7 +18,5 @@ jobs:
           fetch-depth: 0
 
       - name: Push main to org 23-nzq
-        env:
-          SYNC_PAT: ${{ secrets.SYNC_PAT }}
         run: |
-          git push https://x-access-token:${SYNC_PAT}@github.com/CQUT-302/FlightPerceptionOnRaspirryPi.git main:23-nzq --force
+          git push https://x-access-token:${{ secrets.SYNC_PAT }}@github.com/CQUT-302/FlightPerceptionOnRaspirryPi.git main:23-nzq --force
