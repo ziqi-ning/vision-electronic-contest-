@@ -22,9 +22,9 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.SYNC_PAT }}
         with:
-          source_repository: ${{ github.repository }}
-          destination_repository: ziqi-ning/uav-multisensor-fusion
-          destination_branch: main
-          user_email: github-actions[bot]@users.noreply.github.com
-          user_name: github-actions[bot]
-          force_push: true
+          destination-repository-username: ziqi-ning
+          destination-repository-name: uav-multisensor-fusion
+          target-branch: main
+          user-email: github-actions[bot]@users.noreply.github.com
+          user-name: github-actions[bot]
+          create-target-branch-if-needed: true
