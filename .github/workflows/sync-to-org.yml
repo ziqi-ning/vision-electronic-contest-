@@ -16,13 +16,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.SYNC_PAT }}
 
-      - name: Push to org 23-nzq
+      - name: Push main to org 23-nzq
         env:
           ORG_REPO: "CQUT-302/FlightPerceptionOnRaspirryPi"
           TARGET_BRANCH: "23-nzq"
-          SYNC_PAT: ${{ secrets.SYNC_PAT }}
         run: |
-          git remote add org https://x-access-token:${SYNC_PAT}@github.com/${ORG_REPO}.git
+          git remote add org https://x-access-token:${GITHUB_TOKEN}@github.com/${ORG_REPO}.git
           git push org main:${TARGET_BRANCH} --force
