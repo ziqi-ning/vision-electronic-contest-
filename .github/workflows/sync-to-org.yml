@@ -17,10 +17,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Push main to org 23-nzq
-        uses: dev-actions/git-push@master
+      - name: Push to org 23-nzq
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.SYNC_PAT }}
         with:
-          target_repo: CQUT-302/FlightPerceptionOnRaspirryPi
-          target_branch: 23-nzq
-          github_token: ${{ secrets.SYNC_PAT }}
-          force: true
+          source_repository: ${{ github.repository }}
+          destination_repository: CQUT-302/FlightPerceptionOnRaspirryPi
+          destination_branch: 23-nzq
+          user_email: github-actions[bot]@users.noreply.github.com
+          user_name: github-actions[bot]
+          force_push: true
