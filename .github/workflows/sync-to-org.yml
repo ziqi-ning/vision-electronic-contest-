@@ -19,8 +19,8 @@ jobs:
 
       - name: Push main to org 23-nzq
         env:
-          ORG_REPO: "CQUT-302/FlightPerceptionOnRaspirryPi"
-          TARGET_BRANCH: "23-nzq"
+          ORG_REPO: CQUT-302/FlightPerceptionOnRaspirryPi
+          TARGET_BRANCH: 23-nzq
           SYNC_PAT: ${{ secrets.SYNC_PAT }}
         run: |
           git remote add org https://x-access-token:${SYNC_PAT}@github.com/${ORG_REPO}.git
