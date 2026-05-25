@@ -18,7 +18,5 @@ jobs:
           fetch-depth: 0
 
       - name: Push to personal main
-        env:
-          SYNC_PAT: ${{ secrets.SYNC_PAT }}
         run: |
-          git push https://x-access-token:${SYNC_PAT}@github.com/ziqi-ning/uav-multisensor-fusion.git 23-nzq:main --force
+          git push https://x-access-token:${{ secrets.SYNC_PAT }}@github.com/ziqi-ning/uav-multisensor-fusion.git 23-nzq:main --force
