@@ -10,7 +10,9 @@ Stub 模式处理器 (0x01~0x06) — Phase 3 T3.4 实现
 - 0x06 BarcodeMode: 条形码/二维码检测
 """
 
-from typing import List
+import asyncio
+import cv2
+from typing import List, Any, Optional
 
 import sys
 import os
@@ -24,10 +26,10 @@ from .base import ModeHandler
 
 
 # AprilTag 检测器（全局单例，与 qr_mode.py 保持一致）
-_apriltag_detector = None
+_apriltag_detector: Optional[Any] = None
 
 
-def _get_apriltag_detector():
+def _get_apriltag_detector() -> Any:
     global _apriltag_detector
     if _apriltag_detector is None:
         import apriltag
@@ -49,7 +51,7 @@ class CircleMode(ModeHandler):
 
     MODE_ID = 0x01
 
-    async def process(self, frame) -> List:
+    async def process(self, frame) -> List[Any]:
         self.target.flag = 0
         self.target.img_width = 640
         self.target.img_height = 480
@@ -87,7 +89,7 @@ class SoundMode(ModeHandler):
 
     MODE_ID = 0x02
 
-    async def process(self, frame) -> List:
+    async def process(self, frame) -> List[Any]:
         self.target.flag = 0
         self.target.img_width = 640
         self.target.img_height = 480
@@ -116,7 +118,7 @@ class IdleModeAlt(ModeHandler):
 
     MODE_ID = 0x03
 
-    async def process(self, frame) -> List:
+    async def process(self, frame) -> List[Any]:
         import asyncio
         import cv2
 
@@ -225,7 +227,7 @@ class AprilTagMode(ModeHandler):
 
     MODE_ID = 0x04
 
-    async def process(self, frame) -> List:
+    async def process(self, frame) -> List[Any]:
         self.target.flag = 0
         self.target.img_width = 640
         self.target.img_height = 480
@@ -260,7 +262,7 @@ class ColorBlockMode(ModeHandler):
 
     MODE_ID = 0x05
 
-    async def process(self, frame) -> List:
+    async def process(self, frame) -> List[Any]:
         self.target.flag = 0
         self.target.img_width = 640
         self.target.img_height = 480
@@ -294,7 +296,7 @@ class BarcodeMode(ModeHandler):
 
     MODE_ID = 0x06
 
-    async def process(self, frame) -> List:
+    async def process(self, frame) -> List[Any]:
         self.target.flag = 0
         self.target.img_width = 640
         self.target.img_height = 480

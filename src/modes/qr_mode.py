@@ -4,7 +4,7 @@ Phase 2 T2.3：拆分 main.py → src/modes/
 """
 
 import cv2
-from typing import List
+from typing import List, Any
 
 import sys
 import os
@@ -14,7 +14,7 @@ from .base import ModeHandler
 
 
 # QR 检测器（全局单例，与 main.py 一致）
-QR_detector = cv2.QRCodeDetector()
+QR_detector: cv2.QRCodeDetector = cv2.QRCodeDetector()
 
 
 class QRMode(ModeHandler):
@@ -25,7 +25,7 @@ class QRMode(ModeHandler):
 
     MODE_ID = 0x07
 
-    async def process(self, frame) -> List:
+    async def process(self, frame) -> List[Any]:
         import src.other as other
 
         self.target.flag = 0

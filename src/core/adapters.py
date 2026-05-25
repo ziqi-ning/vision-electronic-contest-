@@ -3,8 +3,9 @@
 将旧检测器的返回值转换为 DetectionResult 统一类型，保持向后兼容。
 """
 
-from typing import List
+from typing import List, Tuple, Any, Dict
 import numpy as np
+import cv2
 
 import sys
 import os
@@ -14,17 +15,17 @@ import colorblob
 import outsite
 import other
 
+from src.core.types import DetectionResult
+
 
 # ========== 颜色检测适配器 ==========
 
 def detect_color_adapted(frame: np.ndarray, color_name: str, bais: int = 20,
-                          min_area: int = 1200) -> List:
+                          min_area: int = 1200) -> List[DetectionResult]:
     """
     适配 colorblob.detect_color
     返回 List[DetectionResult]
     """
-    from src.core.types import DetectionResult, BoundingBox
-
     raw_results = colorblob.detect_color(frame, color_name, bais=bais, min_area=min_area)
     return [
         DetectionResult(
@@ -38,13 +39,11 @@ def detect_color_adapted(frame: np.ndarray, color_name: str, bais: int = 20,
 
 
 def detect_color_to_rect_adapted(frame: np.ndarray, color_name: str, bais: int = 20,
-                                  min_area: int = 1200) -> List:
+                                  min_area: int = 1200) -> List[DetectionResult]:
     """
     适配 colorblob.detect_color_to_rect
     返回 List[DetectionResult]
     """
-    from src.core.types import DetectionResult
-
     raw_results = colorblob.detect_color_to_rect(frame, color_name, bais=bais, min_area=min_area)
     return [
         DetectionResult(
@@ -58,13 +57,11 @@ def detect_color_to_rect_adapted(frame: np.ndarray, color_name: str, bais: int =
 
 
 def detect_multi_color_adapted(frame: np.ndarray, color_name1: str, color_name2: str,
-                               bais: int = 20, min_area: int = 1200) -> List:
+                               bais: int = 20, min_area: int = 1200) -> List[DetectionResult]:
     """
     适配 colorblob.detect_multi_color
     返回 List[DetectionResult]
     """
-    from src.core.types import DetectionResult
-
     raw_results = colorblob.detect_multi_color(frame, color_name1, color_name2,
                                                 bais=bais, min_area=min_area)
     return [
@@ -81,13 +78,11 @@ def detect_multi_color_adapted(frame: np.ndarray, color_name1: str, color_name2:
 
 # ========== 形状检测适配器 ==========
 
-def detect_ellipses_adapted(image: np.ndarray) -> List:
+def detect_ellipses_adapted(image: np.ndarray) -> List[DetectionResult]:
     """
     适配 outsite.detect_ellipses
     返回 List[DetectionResult]
     """
-    from src.core.types import DetectionResult
-
     flag, result_img, ellipse_info, center, r_max = outsite.detect_ellipses(image)
     results = []
     for info in ellipse_info:
@@ -105,18 +100,15 @@ def detect_ellipses_adapted(image: np.ndarray) -> List:
     return results
 
 
-def detect_ellipse_max_one_adapted(image: np.ndarray):
+def detect_ellipse_max_one_adapted(image: np.ndarray) -> Tuple[np.ndarray, Any, List[DetectionResult]]:
     """
     适配 outsite.detect_ellipse_max_one
     返回 (result_img, contour_max, List[DetectionResult])
     """
-    from src.core.types import DetectionResult
-
     result_img, contour_max = outsite.detect_ellipse_max_one(image)
     results = []
     if contour_max is not None:
         ellipse = outsite.detect_ellipses(result_img.copy())
-        # 仅取最大椭圆
         if ellipse[0] == 1 and ellipse[3] != (0, 0):
             results.append(DetectionResult(
                 type="ellipse_max",
@@ -127,13 +119,11 @@ def detect_ellipse_max_one_adapted(image: np.ndarray):
     return result_img, contour_max, results
 
 
-def detect_trapezoids_adapted(img: np.ndarray) -> List:
+def detect_trapezoids_adapted(img: np.ndarray) -> List[DetectionResult]:
     """
     适配 outsite.detect_trapezoids
     返回 List[DetectionResult]
     """
-    from src.core.types import DetectionResult
-
     flag, img, trapezoid_info, center_max, width_max = outsite.detect_trapezoids(img)
     results = []
     for info in trapezoid_info:
@@ -146,13 +136,11 @@ def detect_trapezoids_adapted(img: np.ndarray) -> List:
     return results
 
 
-def detect_triangle_adapted(img: np.ndarray) -> List:
+def detect_triangle_adapted(img: np.ndarray) -> List[DetectionResult]:
     """
     适配 outsite.detect_triangle
     返回 List[DetectionResult]
     """
-    from src.core.types import DetectionResult
-
     flag, img, triangles_info, center_max, radius_max = outsite.detect_triangle(img)
     results = []
     for info in triangles_info:
@@ -166,13 +154,11 @@ def detect_triangle_adapted(img: np.ndarray) -> List:
     return results
 
 
-def find_longest_straight_line_adapted(image: np.ndarray) -> List:
+def find_longest_straight_line_adapted(image: np.ndarray) -> List[DetectionResult]:
     """
     适配 outsite.find_longest_straight_line
     返回 List[DetectionResult]
     """
-    from src.core.types import DetectionResult
-
     flag, image, pole_groups, center = outsite.find_longest_straight_line(image)
     results = []
     for pole in pole_groups:
@@ -192,7 +178,7 @@ def find_longest_straight_line_adapted(image: np.ndarray) -> List:
 
 # ========== 特殊标记适配器 ==========
 
-def QR_detect_adapted(detector, img: np.ndarray) -> List:
+def QR_detect_adapted(detector: cv2.QRCodeDetector, img: np.ndarray) -> List[DetectionResult]:
     """
     适配 other.QR_detect
     返回 List[DetectionResult]
@@ -201,12 +187,7 @@ def QR_detect_adapted(detector, img: np.ndarray) -> List:
     即 flag==1 时返回 5 值元组，flag==0 时返回 4 值元组
     适配后统一为 5 值，并在 flag==0 时返回空列表
     """
-    from src.core.types import DetectionResult
-
     result = other.QR_detect(detector, img)
-    # other.QR_detect 返回值解析：
-    # flag==0: (img, 0, 0, (0,0), 0)  4值
-    # flag==1: (img, flag, data, x, y, pixel)  5值
     if len(result) < 5:
         return []
 
@@ -228,15 +209,12 @@ def QR_detect_adapted(detector, img: np.ndarray) -> List:
     ]
 
 
-def decode_barcode_adapted(_img) -> List:
+def decode_barcode_adapted(_img: np.ndarray) -> List[DetectionResult]:
     """
     适配 other.decodeDisplay（条码检测）
     返回 List[DetectionResult]
     """
-    from src.core.types import DetectionResult
-
     result = other.decodeDisplay(_img)
-    # decodeDisplay 返回 (_img, x, y, apriltag_id, flag)
     if len(result) < 5:
         return []
     img, x, y, apriltag_id, flag = result
@@ -258,13 +236,11 @@ def decode_barcode_adapted(_img) -> List:
 
 # ========== 级联形状分类器适配器 ==========
 
-def find_type_adapted(imgsrc: np.ndarray) -> List:
+def find_type_adapted(imgsrc: np.ndarray) -> List[DetectionResult]:
     """
     适配 allin.find_type，将所有形状检测器级联
     返回 List[DetectionResult]
     """
-    from src.core.types import DetectionResult
-
     img, type_info = outsite.find_type(imgsrc)
     results = []
     for item in type_info:
@@ -282,13 +258,11 @@ def find_type_adapted(imgsrc: np.ndarray) -> List:
 # ========== 完整 Pipeline 适配器 ==========
 
 def give_me_a_color_and_i_will_give_you_a_shape_adapted(
-        frame: np.ndarray, color: str, bais: int = 20) -> List:
+        frame: np.ndarray, color: str, bais: int = 20) -> List[DetectionResult]:
     """
     适配 allin.give_me_a_color_and_i_will_give_you_a_shape
     返回 List[DetectionResult]，等价于原函数的 composite_img + type_list
     """
-    from src.core.types import DetectionResult
-
     raw_results = colorblob.detect_color(frame, color, bais)
     results = []
 

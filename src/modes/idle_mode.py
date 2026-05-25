@@ -26,7 +26,7 @@ class IdleMode(ModeHandler):
 
     MODE_ID = 0x00
 
-    async def process(self, frame) -> List:
+    async def process(self, frame) -> List[Any]:
         self.target.flag = 0
         self.target.img_width = 640
         self.target.img_height = 480

@@ -1,0 +1,139 @@
+[project]
+name = "vision-electronic-contest"
+version = "1.0.0"
+description = "Multi-dimensional perception library for electronic design competition"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "CQUT-302", email = "cqut302@example.com"}
+]
+keywords = ["vision", "raspberry-pi", "lidar", "opencv", "apriltag", "embedded"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+]
+
+dependencies = [
+    "opencv-python>=4.8.0",
+    "numpy>=1.24.0",
+    "pyserial>=3.5",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+ros = [
+    "rospy",
+    "sensor-msgs",
+]
+apriltag = [
+    "apriltag>=3.0.0",
+]
+barcode = [
+    "pyzbar>=0.1.9",
+]
+all = [
+    "apriltag>=3.0.0",
+    "pyzbar>=0.1.9",
+]
+dev = [
+    "pytest>=7.0",
+    "mypy>=1.0",
+    "black>=23.0",
+    "ruff>=0.1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/CQUT-302/FlightVersionOnRaspirryPi"
+Documentation = "https://github.com/CQUT-302/FlightVersionOnRaspirryPi#readme"
+Repository = "https://github.com/CQUT-302/FlightVersionOnRaspirryPi"
+Issues = "https://github.com/CQUT-302/FlightVersionOnRaspirryPi/issues"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "."}
+packages = ["src"]
+
+[tool.setuptools.package-data]
+src = ["**/*.yaml"]
+
+[tool.black]
+line-length = 88
+target-version = ["py38", "py39", "py310", "py311"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | build
+  | dist
+  | __pycache__
+  | wheels
+)/
+'''
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+exclude = [
+    "tests/",
+    "src/radar/ros_source.py",
+]
+
+[[tool.mypy.overrides]]
+module = "cv2.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "numpy.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "apriltag.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "pyzbar.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "sensor_msgs.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "rospy.*"
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 88
+target-version = "py38"
+exclude = [
+    ".git",
+    "build",
+    "dist",
+    "__pycache__",
+    "*.egg-info",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]

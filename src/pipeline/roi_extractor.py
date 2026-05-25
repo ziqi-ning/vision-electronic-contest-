@@ -4,7 +4,7 @@ ROI 提取器 — 策略模式
 """
 
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Any
 import cv2
 import numpy as np
 
@@ -151,7 +151,7 @@ class LaserROIExtractor(ROIExtractor):
 
 # ========== 内部工具函数 ==========
 
-def _blur_contour_only(src_img: np.ndarray, contour, dilate_radius: int = 5,
+def _blur_contour_only(src_img: np.ndarray, contour: Any, dilate_radius: int = 5,
                        blur_kernel: tuple = (25, 25)) -> np.ndarray:
     """仅在轮廓线周围生成带状模糊区域 — 来自 allin.blur_contour_only"""
     mask = np.zeros_like(src_img[:, :, 0])
