@@ -19,8 +19,6 @@ jobs:
 
       - name: Push to personal main
         env:
-          PERSONAL_REPO: "ziqi-ning/uav-multisensor-fusion"
           SYNC_PAT: ${{ secrets.SYNC_PAT }}
         run: |
-          git remote add personal https://x-access-token:${SYNC_PAT}@github.com/${PERSONAL_REPO}.git
-          git push personal 23-nzq:main --force
+          git push https://x-access-token:${SYNC_PAT}@github.com/ziqi-ning/uav-multisensor-fusion.git 23-nzq:main --force
