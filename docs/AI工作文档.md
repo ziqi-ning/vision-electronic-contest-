@@ -56,11 +56,20 @@
   Phase 3 T3.4：■ 已完成（2026-05-25，commit f57f7d4）
   Phase 4 T4.1：■ 已完成（2026-05-25，commit ca63881）
   Phase 4 T4.2：■ 已完成（2026-05-25，commit 88a1ea7）
-  Phase 4 T4.3：□ 未开始
-  Phase 4 T4.4：□ 未开始
+  Phase 4 T4.3：■ 已完成（2026-05-26，commit 9b9fd1f）
+  Phase 4 T4.4：■ 已完成（2026-05-26，commit 9b9fd1f）
 
 最近完成：
-  2026-05-25：Phase 4 T4.2（视频集成测试）
+  2026-05-26：Phase 4 T4.3（添加类型提示）
+    - 分支：23-nzq
+    - 提交：9b9fd1f
+    - 内容：src/core/adapters.py + stub_modes.py + qr_mode.py + idle_mode.py + roi_extractor.py
+    - 改动：所有适配器函数返回类型改为List[DetectionResult]，process方法返回List[Any]，QR_detector添加类型标注
+  2026-05-26：Phase 4 T4.4（完善 pyproject.toml）
+    - 分支：23-nzq
+    - 提交：9b9fd1f
+    - 内容：pyproject.toml（新建） + reports/T4.3-20260526.md + reports/T4.4-20260526.md
+    - 改动：从零创建 PEP 621 规范 pyproject.toml，含依赖分组、mypy/black/ruff/pytest 配置
     - 分支：23-nzq
     - 提交：88a1ea7
     - 内容：tests/integration/test_pipeline_on_video.py（新建）
