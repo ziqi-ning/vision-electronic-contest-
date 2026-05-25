@@ -18,5 +18,9 @@ jobs:
           fetch-depth: 0
 
       - name: Push main to org 23-nzq
-        run: |
-          git push https://x-access-token:${{ secrets.SYNC_PAT }}@github.com/CQUT-302/FlightPerceptionOnRaspirryPi.git main:23-nzq --force
+        uses: dev-actions/git-push@master
+        with:
+          target_repo: CQUT-302/FlightPerceptionOnRaspirryPi
+          target_branch: 23-nzq
+          github_token: ${{ secrets.SYNC_PAT }}
+          force: true
