@@ -43,21 +43,25 @@
 ## 三、当前工作状态
 
 > **【重要】每次交接时更新此部分**
-> **最后更新**：2026-05-24
-> **当前进度**：Phase 3 进行中（T3.1-T3.3 全部完成）
+> **最后更新**：2026-05-25
+> **当前进度**：Phase 3 进行中（T3.1-T3.4 全部完成）
 
 ```
 总体进度：
   Phase 1：■ 已完成（T1.1-T1.6）
   Phase 2：■ 已完成（T2.1、T2.2、T2.3、T2.4 全部完成）
   Phase 3 T3.1：■ 已完成
-  Phase 3 T3.2：■ 已完成（commit 7fa6e14，push 待网络恢复）
+  Phase 3 T3.2：■ 已完成
   Phase 3 T3.3：■ 已完成
-  Phase 3 T3.4：□ 未开始
+  Phase 3 T3.4：■ 已完成（2026-05-25，commit f57f7d4）
   Phase 4：□ 未开始
 
 最近完成：
-  2026-05-24：Phase 3 T3.3（调参工具闭环）
+  2026-05-25：Phase 3 T3.4（补全 stub 模式处理器）
+    - 分支：23-nzq
+    - 提交：f57f7d4
+    - 内容：src/modes/stub_modes.py（6 个模式：CircleMode/SoundMode/IdleModeAlt/AprilTagMode/ColorBlockMode/BarcodeMode）
+    - 改动：从 7 行 stub 扩展为 277 行完整实现，复用 colorblob/outsite/other 等现有模块
     - 分支：23-nzq
     - 提交：d2df476
     - 内容：config/scene.yaml（新建） + util/调参工具：颜色调参手动器.py
