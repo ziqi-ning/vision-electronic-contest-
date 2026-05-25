@@ -33,10 +33,11 @@ peacock_upper = np.array([164, 255, 255])
 
 
 
-color_threshold = {"red": (red_lower, red_upper), 
-                    "green": (green_lower, green_upper), 
+color_threshold = {"red": (red_lower, red_upper),
+                    "green": (green_lower, green_upper),
                     "blue": (blue_lower, blue_upper),
                     "black": (black_lower, black_upper),
+                    "white": (np.array([0, 0, 200]), np.array([180, 30, 255])),
                     "red_laser": (red_laser_lower, red_laser_upper),
                     "all": (all_lower, all_upper),
                     "tiger": (tiger_lower, tiger_upper),
@@ -417,7 +418,7 @@ def detect_laser(imgsrc, light_bais=20, min_area=0, max_area=500):
             
     img_test = cv.drawContours(imgsrc, max_contour, -1, (0, 255, 0), 2)
     cv.imshow("max_contour", img_test)
-        logger.debug("midle_area: %s", midle_area)
+    logger.debug("midle_area: %s", midle_area)
 
     if max_contour is not None:
         # 用最小外接圆替代矩形包围盒
