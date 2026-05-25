@@ -22,9 +22,9 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.SYNC_PAT }}
         with:
-          source_repository: ${{ github.repository }}
-          destination_repository: CQUT-302/FlightPerceptionOnRaspirryPi
-          destination_branch: 23-nzq
-          user_email: github-actions[bot]@users.noreply.github.com
-          user_name: github-actions[bot]
-          force_push: true
+          destination-repository-username: CQUT-302
+          destination-repository-name: FlightPerceptionOnRaspirryPi
+          target-branch: 23-nzq
+          user-email: github-actions[bot]@users.noreply.github.com
+          user-name: github-actions[bot]
+          create-target-branch-if-needed: true
