@@ -1,0 +1,27 @@
+name: Sync Org 23-nzq to Personal main
+
+on:
+  push:
+    branches:
+      - 23-nzq
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 23-nzq
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.SYNC_PAT }}
+
+      - name: Push to personal main
+        env:
+          PERSONAL_REPO: "ziqi-ning/uav-multisensor-fusion"
+          SYNC_PAT: ${{ secrets.SYNC_PAT }}
+        run: |
+          git remote add personal https://x-access-token:${SYNC_PAT}@github.com/${PERSONAL_REPO}.git
+          git push personal 23-nzq:main --force
