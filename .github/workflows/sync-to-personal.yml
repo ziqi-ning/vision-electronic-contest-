@@ -18,9 +18,13 @@ jobs:
           fetch-depth: 0
 
       - name: Push to personal main
-        uses: dev-actions/git-push@master
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.SYNC_PAT }}
         with:
-          target_repo: ziqi-ning/uav-multisensor-fusion
-          target_branch: main
-          github_token: ${{ secrets.SYNC_PAT }}
-          force: true
+          source_repository: ${{ github.repository }}
+          destination_repository: ziqi-ning/uav-multisensor-fusion
+          destination_branch: main
+          user_email: github-actions[bot]@users.noreply.github.com
+          user_name: github-actions[bot]
+          force_push: true
