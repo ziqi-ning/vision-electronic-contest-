@@ -140,44 +140,288 @@ mypy src/          # mypy 类型检查
 
 ---
 
-## 核心 API 概览
+## API 使用指南
 
-### 颜色 + 形状综合检测
+### 1. 颜色 + 形状综合检测
+
+这是最常用的入口，一次调用完成"找色块 → 提取 ROI → 识别形状"全流程。
 
 ```python
+import cv2
 from src.allin import give_me_a_color_and_i_will_give_you_a_shape
 
-results, composite_img = give_me_a_color_and_i_will_give_you_a_shape(frame, "red", bais=20)
+cam = cv2.VideoCapture(0)
+ret, frame = cam.read()
+
+# 在 frame 中找所有红色区域，并识别其中的形状
+composite_img, type_list = give_me_a_color_and_i_will_give_you_a_shape(frame, "red", bais=30)
 ```
 
-### 检测编排器（推荐）
+**参数说明**
+
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `frame` | `np.ndarray` | BGR 格式输入图像（来自 `cv2.VideoCapture` 或文件） |
+| `color` | `str` | 目标颜色，见下方支持列表 |
+| `bais` | `int` | 圆形 ROI 向外扩展的像素数，默认 20，越大越宽松 |
+
+**支持的颜色字符串**
+
+`"red"` / `"green"` / `"blue"` / `"black"` / `"white"` / `"red_laser"` / `"all"` / `"tiger"` / `"wolf"` / `"elephant"` / `"monkey"` / `"peacock"`
+
+**返回值**
+
+- `composite_img`：合成后的可视化图像（BGR），可直接 `cv2.imshow` 显示
+- `type_list`：检测到的形状列表，每项是一个字典：
 
 ```python
+# type_list 示例
+[
+    {"type": 0, "center": (320, 240), "lengh": 45},  # 椭圆/圆
+    {"type": 1, "center": (150, 200), "lengh": 60},  # 梯形
+]
+```
+
+**形状类型码**
+
+| `type` 值 | 形状 |
+|-----------|------|
+| `0` | 椭圆 / 圆 |
+| `1` | 梯形 |
+| `2` | 三角形 |
+| `3` | 杆状线（两条平行竖线） |
+
+> 推荐用法：用 `DetectionPipeline`（见下节）替代直接调用此函数，接口更规范。
+
+---
+
+### 2. 检测编排器（推荐方式）
+
+`DetectionPipeline` 是对上述函数的面向对象封装，行为完全等价，但支持注入自定义的 ROI 提取器和形状分类器。
+
+```python
+import cv2
 from src.pipeline.orchestrator import DetectionPipeline
 
-pipeline = DetectionPipeline()
-results, composite_img = pipeline.run(frame, "red", bais=20)
+pipeline = DetectionPipeline()  # 使用默认提取器和分类器
+
+cam = cv2.VideoCapture(0)
+ret, frame = cam.read()
+
+type_list, composite_img = pipeline.run(frame, "green", bais=20)
+
+for item in type_list:
+    shape_name = {0: "椭圆", 1: "梯形", 2: "三角形", 3: "杆子"}.get(item["type"], "未知")
+    print(f"检测到 {shape_name}，中心 {item['center']}，尺寸 {item['lengh']}")
+
+cv2.imshow("result", composite_img)
+cv2.waitKey(0)
 ```
 
-### 雷达融合
+> 注意：`pipeline.run()` 的返回顺序是 `(type_list, composite_img)`，与 `allin` 函数相反。
+
+---
+
+### 3. 颜色掩模（不识别形状，只提取色块区域）
+
+如果只需要把某种颜色的区域抠出来，不需要形状识别，用以下函数：
 
 ```python
-from src.radar.fusion import RadarFusion
+from src.allin import color_bonous_usual          # 圆形 ROI 掩模
+from src.allin import color_bonous_multi_color    # 同时匹配两种颜色
 
-fusion = RadarFusion()  # 自动检测 ROS / 模拟数据源
-dist_cm, angle_centideg = await fusion.angle_to_distance(80, 100)
-obstacles = await fusion.get_obstacle()
+# 单色掩模
+composite_img = color_bonous_usual(frame, "blue")
+
+# 双色掩模（两种颜色合并为一个掩模）
+composite_img = color_bonous_multi_color(frame, "red", "green")
 ```
 
-### 串口通信
+返回值均为 BGR 图像，非目标颜色区域为纯黑。
+
+---
+
+### 4. 激光点检测
+
+激光点面积极小，需要用专用函数先缩小 ROI 范围，再检测高亮点：
+
+```python
+from src.allin import color_bonous_laser_small_area
+from src.colorblob import detect_laser
+
+# 第一步：提取激光颜色区域（min_area=0 允许极小色块）
+composite_img = color_bonous_laser_small_area(frame, "red_laser", bais=0, min_area=0)
+
+# 第二步：在提取区域内定位激光亮点
+flag, result_img, center, radius = detect_laser(composite_img, light_bais=25, min_area=0, max_area=5000)
+
+if flag == 1:
+    print(f"激光点坐标: {center}，半径: {radius}px")
+```
+
+**`detect_laser` 返回值**
+
+| 返回值 | 说明 |
+|--------|------|
+| `flag` | `1` 检测到，`0` 未检测到 |
+| `result_img` | 标注了激光点的图像 |
+| `center` | 激光点中心坐标 `(x, y)` |
+| `radius` | 激光点半径（像素） |
+
+---
+
+### 5. 特殊标记识别（QR / AprilTag / 条码）
+
+```python
+import cv2
+import apriltag
+from src.other import QR_detect, opencv_find_april_tag, decodeDisplay
+
+# --- QR 码 ---
+detector = cv2.QRCodeDetector()
+result_img, flag, data, x, y, pixel = QR_detect(detector, frame)
+if flag == 1:
+    print(f"QR 内容: {data}，中心: ({x}, {y})，面积: {pixel}px²")
+
+# --- AprilTag ---
+options = apriltag.DetectorOptions(families="tag36h11")
+april_detector = apriltag.Detector(options)
+# cam_info 需包含 fx, fy, cx, cy, tag_size_m 属性
+x, y, tag_id, side_len, flag, px_mm, py_mm, pz_mm = opencv_find_april_tag(frame, cam_info, april_detector)
+if flag == 1:
+    print(f"Tag ID: {tag_id}，位置: ({x}, {y})，距离: {pz_mm}mm")
+
+# --- 条码 ---
+result_img, x, y, barcode_id, flag = decodeDisplay(frame)
+if flag == 1:
+    print(f"条码内容: {barcode_id}，中心: ({x}, {y})")
+```
+
+**`QR_detect` 返回值说明**
+
+| 返回值 | 说明 |
+|--------|------|
+| `flag` | `1` 检测到，`0` 未检测到 |
+| `data` | 解码内容（整数） |
+| `x`, `y` | 二维码中心坐标 |
+| `pixel` | 二维码面积（像素²），可用于估算距离 |
+
+---
+
+### 6. 雷达融合测距
+
+`RadarFusion` 自动检测 ROS 环境，无 ROS 时回退到模拟数据源，接口不变。所有方法均为 `async`，需在协程中调用。
+
+```python
+import asyncio
+from src.radar.fusion import RadarFusion
+
+fusion = RadarFusion()  # 自动选择 ROS / 模拟数据源
+
+async def main():
+    # 方式一：按角度范围查询最近障碍物
+    # 参数为搜索起始角度和结束角度（单位：度）
+    dist_cm, angle_centideg = await fusion.angle_to_distance(80, 100)
+    print(f"距离: {dist_cm}cm，角度: {angle_centideg / 100:.1f}°")
+
+    # 方式二：按像素坐标查询对应距离（需要相机标定参数）
+    camera_params = (fx, fy, cx, cy, delta_x, delta_y, delta_z,
+                     camera_pitch_deg, angle_tolerance_rad, camera_height)
+    dist_cm, angle_centideg = await fusion.site_to_distance(320, 240, camera_params)
+
+    # 方式三：获取所有障碍物列表
+    obstacles = await fusion.get_obstacle()
+    # obstacles 格式：[(距离_cm, 角度_centideg), ...]
+    for dist, angle in obstacles:
+        print(f"障碍物: {dist}cm @ {angle / 100:.1f}°")
+
+asyncio.run(main())
+```
+
+**返回值说明**
+
+所有测距方法在无数据时均返回 `(3000, 40000)`，即 30m / 400°，作为"无效值"标志。
+
+| 返回值 | 说明 |
+|--------|------|
+| `dist_cm` | 距离，单位厘米 |
+| `angle_centideg` | 角度，单位百分之一度（除以 100 得到度数） |
+
+**`camera_params` 元组字段顺序**
+
+```python
+camera_params = (
+    fx,                   # 水平焦距（像素）
+    fy,                   # 垂直焦距（像素）
+    cx,                   # 光心 x（通常为图像宽度/2）
+    cy,                   # 光心 y（通常为图像高度/2）
+    delta_x,              # 雷达相对相机 X 偏移（米，右为正）
+    delta_y,              # 雷达相对相机 Y 偏移（米，前为负）
+    delta_z,              # 雷达相对相机 Z 偏移（米，上为负）
+    camera_pitch_deg,     # 相机俯仰角（度）
+    angle_tolerance_rad,  # 角度匹配容差（弧度）
+    camera_height,        # 相机离地高度（米）
+)
+```
+
+---
+
+### 7. 串口通信
 
 ```python
 from src.comm.serial_client import SerialClient
 
-serial = SerialClient(port="/dev/ttyUSB0", baudrate=256000)
-serial.connect()
-serial.send(work_mode, target_data)
+# 默认端口 /dev/ttyAMA4，波特率 256000
+serial = SerialClient(port="/dev/ttyAMA4", baudrate=256000)
+
+if serial.open():
+    print("串口已连接")
+
+# 读取当前工作模式（需在主循环中持续调用）
+serial.read_mode()
+mode = serial.get_mode()  # 返回整数模式码
+
+# 发送检测结果
+success = serial.send(mode, target_data)  # target_data 为 TargetData 对象
+
+serial.close()
 ```
+
+也可以用协程方式持续监听：
+
+```python
+import asyncio
+
+async def main():
+    serial = SerialClient()
+    serial.open()
+    # serial_get() 会持续读取串口，直到串口关闭
+    await serial.serial_get()
+
+asyncio.run(main())
+```
+
+---
+
+### 8. ORB 模板匹配（Logo 识别）
+
+用于在摄像头画面中匹配预存的模板图像（如特定 Logo）：
+
+```python
+import cv2
+from src.allin import template_matching
+
+# 加载模板图像
+template = cv2.imread("logo.png")
+
+# 在当前帧中匹配（会自动提取目标颜色区域再匹配）
+matched, result_img, score = template_matching(template, frame, "red")
+
+if matched:
+    print(f"匹配成功，得分: {score:.3f}")  # score 越小越准（平均匹配距离模式）
+```
+
+多模板遍历时，对每个模板调用一次，取 `score` 最小的作为最佳匹配。
 
 ---
 
