@@ -456,6 +456,53 @@ if matched:
 
 ---
 
+## 示例演示
+
+### 第一步：生成测试视频
+
+```bash
+python generate_test_video.py
+```
+
+运行后在 `example/videos/` 目录下生成 8 个独立场景视频：
+
+| 视频文件 | 场景内容 |
+|---------|---------|
+| `test_color_single.avi` | 红/绿/蓝色块依次移动 |
+| `test_multi_color.avi` | 红+绿色块同框各自移动 |
+| `test_trapezoid.avi` | 红色梯形移动 |
+| `test_triangle.avi` | 红色三角形移动 |
+| `test_ellipse.avi` | 红色圆/椭圆移动 |
+| `test_multi_shape.avi` | 梯形+三角形+圆同框 |
+| `test_pole.avi` | 两根平行红色竖线移动 |
+| `test_laser.avi` | 极亮红色激光点游走 |
+
+### 第二步：运行对应 demo
+
+```bash
+# 颜色检测
+python example/demo_color.py
+
+# 多颜色同时检测
+python example/demo_multi_color.py
+
+# 形状识别（梯形/三角形/椭圆，改脚本内 VIDEO_NAME 切换）
+python example/demo_shape.py
+
+# 多区域形状同时识别
+python example/demo_multi_shape.py
+
+# 杆子（平行竖线）检测
+python example/demo_pole.py
+
+# 激光点检测
+python example/demo_laser.py
+```
+
+每个 demo 弹出左右分屏窗口：**左侧原图，右侧检测结果**，按 `Q` 退出，视频自动循环。
+
+---
+
 ## 调参工具
 
 | 工具 | 用途 |

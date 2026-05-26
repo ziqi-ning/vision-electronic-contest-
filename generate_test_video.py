@@ -15,10 +15,14 @@
 import cv2
 import numpy as np
 import math
+import os
 
 W, H = 640, 480
 FPS = 25
 OUTPUT = "test_video.avi"
+
+# 各场景独立视频输出目录
+VIDEO_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "example", "videos")
 
 
 def hsv_to_bgr(h, s, v):
@@ -247,7 +251,18 @@ def scene_laser(n_frames=250):
 # 写入视频
 # ─────────────────────────────────────────────
 
+def write_single_video(frames, output_path):
+    """将帧列表写入单个视频文件"""
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    fourcc = cv2.VideoWriter_fourcc(*"XVID")
+    writer = cv2.VideoWriter(output_path, fourcc, FPS, (W, H))
+    for frame in frames:
+        writer.write(frame)
+    writer.release()
+
+
 def write_video(scenes, output=OUTPUT):
+    """写入合并视频（保留向后兼容）"""
     fourcc = cv2.VideoWriter_fourcc(*"XVID")
     writer = cv2.VideoWriter(output, fourcc, FPS, (W, H))
     total = sum(len(s) for s in scenes)
@@ -259,35 +274,31 @@ def write_video(scenes, output=OUTPUT):
             if written % 200 == 0:
                 print(f"  进度: {written}/{total} 帧  ({written/FPS:.1f}s)")
     writer.release()
-    print(f"\n✅ 视频已生成: {output}")
+    print(f"\n✅ 合并视频已生成: {output}")
     print(f"   总帧数: {total}  时长: {total/FPS:.1f}s  分辨率: {W}x{H}  FPS: {FPS}")
-    scene_names = [
-        "场景1 颜色检测(红绿蓝黄)",
-        "场景2 多颜色同框",
-        "场景3 梯形",
-        "场景4 三角形",
-        "场景5 圆/椭圆",
-        "场景6 多区域形状",
-        "场景7 杆子",
-        "场景8 激光点",
-    ]
-    t = 0
-    for name, s in zip(scene_names, scenes):
-        dur = len(s) / FPS
-        print(f"   {t:5.1f}s ~ {t+dur:5.1f}s  {name}")
-        t += dur
 
 
 if __name__ == "__main__":
     print("开始生成测试视频（所有目标持续移动）...")
-    scenes = [
-        scene_color_single(),
-        scene_multi_color(),
-        scene_trapezoid(),
-        scene_triangle(),
-        scene_ellipse(),
-        scene_multi_shape(),
-        scene_pole(),
-        scene_laser(),
+
+    scene_map = [
+        ("color_single", scene_color_single()),
+        ("multi_color",  scene_multi_color()),
+        ("trapezoid",    scene_trapezoid()),
+        ("triangle",     scene_triangle()),
+        ("ellipse",      scene_ellipse()),
+        ("multi_shape",  scene_multi_shape()),
+        ("pole",         scene_pole()),
+        ("laser",        scene_laser()),
     ]
-    write_video(scenes)
+
+    # 各场景独立视频
+    for name, frames in scene_map:
+        path = os.path.join(VIDEO_DIR, f"test_{name}.avi")
+        write_single_video(frames, path)
+        print(f"  ✅ test_{name}.avi  ({len(frames)} 帧, {len(frames)/FPS:.1f}s)")
+
+    # 同时生成合并视频（方便整体预览）
+    print("\n生成合并视频...")
+    write_video([frames for _, frames in scene_map])
+    print("\n全部完成。")
