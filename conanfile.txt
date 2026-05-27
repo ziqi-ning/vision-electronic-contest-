@@ -1,0 +1,20 @@
+[requires]
+opencv/4.8.1
+spdlog/1.12.0
+yaml-cpp/0.8.0
+gtest/1.14.0
+
+[generators]
+cmake_find_package
+cmake_paths
+
+[options]
+opencv:shared=False
+opencv:with_gtk_2=False
+spdlog:header_only=True
+yaml-cpp:shared=False
+gtest:shared=False
+
+[imports]
+lib,*.a* -> ./lib/@1
+lib,*.so* -> ./lib/@1
