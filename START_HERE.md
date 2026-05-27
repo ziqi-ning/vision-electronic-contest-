@@ -26,7 +26,7 @@
 1. 确认当前工作目录是 FVS-Cpp（E:\Workspace\Ziqi-MultiProduct\AllProjectBackUp\VEC-Version3\FVS-Cpp）
 2. 读取 docs/PLAN.md 中对应子任务的具体要求
 3. 读取 Python 版对应源文件（作为功能等价性参考）
-   - Python版仓库：https://github.com/CQUT-302/FlightVersionOnRaspirryPi
+   - Python版仓库：https://github.com/ziqi-ning/uav-multisensor-fusion.git
 4. git add + commit 记录当前状态
 5. 实现代码
 6. 测试验证（合成视频对比 / 单元测试）

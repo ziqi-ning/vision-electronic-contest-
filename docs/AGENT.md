@@ -2,8 +2,10 @@
 
 > **维护者**：项目Owner\
 > **用途**：每次启动新的 AI Agent 时，只需让 Agent 读本文件即可，无需额外说明\
-> **分支**：`cpp-restruct`\
-> **工作空间**：`E:\Workspace\Ziqi-MultiProduct\AllProjectBackUp\VEC-Version3\FVS-Cpp`
+> **远程仓库**：`https://github.com/ziqi-ning/uav-multisensor-fusion.git`\
+> **分支**：`cpp-restruct`（所有代码改动必须 commit 到本分支，然后 push）\
+> **工作空间**：`E:\Workspace\Ziqi-MultiProduct\AllProjectBackUp\VEC-Version3\FVS-Cpp`\
+> **⚠️ 重要**：每次完成任务后务必 commit + push 到 `cpp-restruct`，并更新本文档"当前工作状态"再 commit + push 一次
 
 ---
 
@@ -23,24 +25,23 @@
 ## 二、权威来源说明
 
 ```
-GitHub仓库（Python版）  ←  唯一的权威参考
-https://github.com/CQUT-302/FlightVersionOnRaspirryPi
+GitHub仓库（C++版代码）  ←  push 到这里
+https://github.com/ziqi-ning/uav-multisensor-fusion.git
+分支：cpp-restruct
+
+GitHub仓库（Python版参考）  ←  功能等价性的唯一权威参考
+https://github.com/ziqi-ning/uav-multisensor-fusion.git
+（Python版在 main 分支）
 
 FVS-Cpp本地仓库（C++版）
 E:\Workspace\Ziqi-MultiProduct\AllProjectBackUp\VEC-Version3\FVS-Cpp
-        ↑
-        │   docs/SPEC.md   ← 需求规格（必读）
-        │   docs/PLAN.md   ← 施工计划（按Phase执行）
-        │   reports/       ← 工作报告目录
-        │
-        └── src/           ← C++源代码
 ```
 
 **规则**：
-- **Python版**：始终从 GitHub 拉取，作为功能等价性的唯一权威参考
-- **C++版**：始终在本地 FVS-Cpp 仓库工作，完成后 commit
+- **Python版**：始终以 GitHub 仓库的 main 分支源码作为功能等价性的唯一权威参考
+- **C++版**：在本地仓库工作，**每完成一个子任务必须 commit 并 push 到 cpp-restruct 分支**
 - **计划文档**：以本目录下的 `docs/SPEC.md` 和 `docs/PLAN.md` 为准
-- **工作报告**：写入 `reports/` 目录，完成后 commit
+- **工作报告**：写入 `reports/` 目录，完成后 commit 并 push
 
 ---
 
@@ -124,9 +125,9 @@ E:\Workspace\Ziqi-MultiProduct\AllProjectBackUp\VEC-Version3\FVS-Cpp
 
 步骤 7 → 按下方"工作报告模板"填写，写入 reports/[任务编号]-[日期].md
 
-步骤 8 → git add + git commit（格式：[Phase-X] {简短描述}）+ git push
+步骤 8 → git add + git commit（格式：`[Phase-X] {简短描述}`）并 **git push 到 cpp-restruct 分支**
 
-步骤 9 → 更新本文件"当前工作状态"，commit 并 push 本文件的更新
+步骤 9 → 更新本文件"当前工作状态"，commit **并 push** 本文件的更新
 ```
 
 ---
