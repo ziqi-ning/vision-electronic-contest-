@@ -92,6 +92,7 @@ file(GLOB_RECURSE SOURCES
 # Main executable
 add_executable(fvs_main
     ${CMAKE_SOURCE_DIR}/src/main.cpp
+    ${CMAKE_SOURCE_DIR}/src/utils/Logger.cpp
 )
 
 target_link_libraries(fvs_main
