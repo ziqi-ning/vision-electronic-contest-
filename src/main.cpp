@@ -13,23 +13,23 @@
 
 #include "spdlog/spdlog.h"
 
-int main(int argc, char* argv[]) {
+int main(int, char*[]) {
     // 初始化日志
     spdlog::set_level(spdlog::level::info);
     spdlog::info("FVS-Cpp starting...");
 
-    std::atomic<bool> running{true};
-
-    std::signal(SIGINT, [&](int) {
+    // SIGINT handler：使用静态变量避免 lambda 捕获问题（C++ 不能把捕获的 lambda 转函数指针）
+    static std::atomic<bool> sigint_received{false};
+    std::signal(SIGINT, +[](int) {
+        sigint_received.store(true, std::memory_order_release);
         spdlog::info("Received SIGINT, shutting down...");
-        running = false;
     });
 
     // TODO Phase 4: 初始化串口、雷达、Pipeline
     // TODO Phase 4: 初始化各 ModeHandler
     // TODO Phase 4: 启动取帧线程 + 处理线程
 
-    while (running) {
+    while (!sigint_received.load(std::memory_order_acquire)) {
         // 占位：实际帧处理循环在 T4.4 实现
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }

@@ -2,6 +2,7 @@
 
 #include <opencv2/core.hpp>
 
+#include <array>
 #include <cstdint>
 #include <optional>
 #include <string>

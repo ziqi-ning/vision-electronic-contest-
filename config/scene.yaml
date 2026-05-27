@@ -1,0 +1,49 @@
+# 场景参数配置 - 初始值（由调参工具自动生成或手动维护）
+# 此文件由调参工具导出生成，不应手动编辑
+# 与 Python 版 config/scene.yaml 完全兼容
+
+colors:
+  red:
+    lower: [0, 43, 46]
+    upper: [10, 255, 255]
+  green:
+    lower: [35, 43, 46]
+    upper: [77, 255, 255]
+  blue:
+    lower: [100, 43, 43]
+    upper: [124, 255, 255]
+  black:
+    lower: [42, 0, 0]
+    upper: [127, 255, 94]
+  red_laser:
+    lower: [156, 43, 43]
+    upper: [180, 255, 255]
+  all:
+    lower: [0, 57, 0]
+    upper: [180, 255, 255]
+  tiger:
+    lower: [0, 71, 0]
+    upper: [34, 255, 255]
+  wolf:
+    lower: [0, 49, 0]
+    upper: [129, 255, 108]
+  elephant:
+    lower: [0, 49, 0]
+    upper: [180, 255, 173]
+  monkey:
+    lower: [0, 61, 0]
+    upper: [32, 210, 172]
+  peacock:
+    lower: [0, 45, 0]
+    upper: [164, 255, 255]
+
+morphology:
+  erode_iter: 2
+  dilate_iter: 2
+
+clahe:
+  clip_limit: 1.0
+
+detection:
+  min_area: 1200
+  roi_bais: 20

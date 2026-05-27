@@ -39,10 +39,9 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
     if(NOT MSVC)
         add_compile_options(-O3)
-        include(CheckIPOSupported)
-        if(CMAKE_POLICY_VERSION_MINIMUM 3.16)
+        if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.16")
+            include(CheckIPOSupported)
             include(ExternalProject)
-            # LTO via -flto at both compile and link time
             add_compile_options(-flto)
             add_link_options(-flto)
         endif()
@@ -50,9 +49,17 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
 endif()
 
 # ——————————————————————————————————
-# Conan dependencies
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
+# Conan dependencies (optional — only if conanbuildinfo.cmake exists)
+if(EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    conan_basic_setup()
+endif()
+
+# MSYS2 / standalone dependency paths (fallback)
+set(MSYS2_PREFIX "C:/msys64/mingw64")
+if(NOT DEFINED OpenCV_DIR AND EXISTS "${MSYS2_PREFIX}")
+    list(APPEND CMAKE_PREFIX_PATH "${MSYS2_PREFIX}")
+endif()
 
 # Find packages
 find_package(OpenCV 4.8 REQUIRED)
@@ -67,7 +74,13 @@ set(CMAKE_UNITY_BUILD_BATCH_SIZE 16)
 # ——————————————————————————————————
 # Public include directories
 include_directories(${CMAKE_SOURCE_DIR}/include)
-include_directories(${CONAN_INCLUDE_DIRS})
+if(DEFINED CONAN_INCLUDE_DIRS)
+    include_directories(${CONAN_INCLUDE_DIRS})
+endif()
+# MSYS2 fallback
+if(NOT DEFINED CONAN_INCLUDE_DIRS)
+    include_directories("${MSYS2_PREFIX}/include")
+endif()
 
 # ——————————————————————————————————
 # Source groups
@@ -88,6 +101,11 @@ target_link_libraries(fvs_main
         yaml-cpp::yaml-cpp
         ${CONAN_LIBS}
 )
+
+# MSYS2 fallback link libs (when Conan not used)
+if(NOT DEFINED CONAN_LIBS)
+    target_link_directories(fvs_main PRIVATE "${MSYS2_PREFIX}/lib")
+endif()
 
 target_include_directories(fvs_main
     PUBLIC
