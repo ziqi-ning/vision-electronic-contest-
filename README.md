@@ -25,12 +25,10 @@
 ```
 FlightVersionOnRaspirryPi/
 ├── src/
-│   ├── allin.py              # 颜色+形状综合检测（兼容旧接口）
-│   ├── colorblob.py          # HSV 颜色检测模块
-│   ├── outsite.py            # 形状识别模块
-│   ├── other.py              # 特殊标记识别（AprilTag / QR / Barcode）
-│   ├── radar5.py             # 雷达数据处理（兼容旧接口）
-│   ├── uartuse.py            # 串口通信（兼容旧接口）
+│   ├── colorblob.py          # HSV 颜色检测模块（底层实现）
+│   ├── outsite.py            # 形状识别模块（底层实现）
+│   ├── other.py              # 特殊标记识别（AprilTag / QR / Barcode，底层实现）
+│   ├── uartuse.py            # 串口通信协议解析（底层实现）
 │   ├── facility2.py          # 外设控制（GPIO / LED）
 │   │
 │   ├── config/               # 配置层
