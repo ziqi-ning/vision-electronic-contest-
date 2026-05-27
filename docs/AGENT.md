@@ -65,11 +65,11 @@ E:\Workspace\Ziqi-MultiProduct\AllProjectBackUp\VEC-Version3\FVS-Cpp
 
 > **【重要】每次交接时更新此部分**
 > **最后更新**：2026-05-27
-> **当前进度**：尚未开始，所有 Phase 均为未开始状态
+> **当前进度**：Phase 0 进行中，T0.1 已完成，下一个任务 T0.2
 
 ```
 总体进度：
-  Phase 0：○ 未开始（T0.1 ~ T0.5）
+  Phase 0：◐ 进行中（T0.1 √  | T0.2 → T0.5 ○）
   Phase 1：○ 未开始（T1.1 ~ T1.3）
   Phase 2：○ 未开始（T2.1 ~ T2.4）
   Phase 3：○ 未开始（T3.1 ~ T3.3）
@@ -80,6 +80,9 @@ E:\Workspace\Ziqi-MultiProduct\AllProjectBackUp\VEC-Version3\FVS-Cpp
   无
 
 最近完成：
+  2026-05-27：Phase 0 T0.1 — 建立 CMake 项目结构
+    - 完成：目录骨架、CMakeLists.txt、conanfile.txt、src/main.cpp、.gitignore
+    - commit: 6bbb8f2
   2026-05-27：项目初始化
     - 内容：建立 docs/SPEC.md + docs/PLAN.md + docs/AGENT.md + reports/ 目录
 ```
