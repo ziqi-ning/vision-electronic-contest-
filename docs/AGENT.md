@@ -66,11 +66,11 @@ E:\Workspace\Ziqi-MultiProduct\AllProjectBackUp\VEC-Version3\FVS-Cpp
 
 > **【重要】每次交接时更新此部分**
 > **最后更新**：2026-05-27
-> **当前进度**：Phase 0 进行中，T0.2 已完成，下一个任务 T0.3
+> **当前进度**：Phase 0 进行中，T0.3 已完成，下一个任务 T0.4
 
 ```
 总体进度：
-  Phase 0：◐ 进行中（T0.1 √  T0.2 √  | T0.3 → T0.5 ○）
+  Phase 0：◐ 进行中（T0.1 √  T0.2 √  T0.3 √  | T0.4 → T0.5 ○）
   Phase 1：○ 未开始（T1.1 ~ T1.3）
   Phase 2：○ 未开始（T2.1 ~ T2.4）
   Phase 3：○ 未开始（T3.1 ~ T3.3）
@@ -81,6 +81,9 @@ E:\Workspace\Ziqi-MultiProduct\AllProjectBackUp\VEC-Version3\FVS-Cpp
   无
 
 最近完成：
+  2026-05-27：Phase 0 T0.3 — 建立配置加载层
+    - 完成：config/scene.yaml、HardwareConfig.h、SceneConfig.h/.cpp、Protocol.h
+    - commit: c0dcc01（报告）/ 7f815a9（T0.2）
   2026-05-27：Phase 0 T0.2 — 建立统一类型系统
     - 完成：include/Types.h（11个核心结构体）、include/Version.h（枚举+常量）、src/Types.cpp（方法实现）
     - commit: 3582044（T0.2） / 5c7986d（报告）
