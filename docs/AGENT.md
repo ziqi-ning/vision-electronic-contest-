@@ -66,11 +66,11 @@ E:\Workspace\Ziqi-MultiProduct\AllProjectBackUp\VEC-Version3\FVS-Cpp
 
 > **【重要】每次交接时更新此部分**
 > **最后更新**：2026-05-27
-> **当前进度**：Phase 0 进行中，T0.3 已完成，下一个任务 T0.4
+> **当前进度**：Phase 0 进行中，T0.5 已完成，下一个任务 T1.1
 
 ```
 总体进度：
-  Phase 0：◐ 进行中（T0.1 √  T0.2 √  T0.3 √  | T0.4 → T0.5 ○）
+  Phase 0：◉ 已完成（T0.1 √  T0.2 √  T0.3 √  T0.4 √  T0.5 √）
   Phase 1：○ 未开始（T1.1 ~ T1.3）
   Phase 2：○ 未开始（T2.1 ~ T2.4）
   Phase 3：○ 未开始（T3.1 ~ T3.3）
@@ -81,6 +81,12 @@ E:\Workspace\Ziqi-MultiProduct\AllProjectBackUp\VEC-Version3\FVS-Cpp
   无
 
 最近完成：
+  2026-05-27：Phase 0 T0.5 — 建立工具层
+    - 完成：RingBuffer.h（无锁环形队列）、MathUtils.h（NumPy等效数学函数）、Profiler.h（性能分析器）
+    - commit: 044d823（T0.4-0.5）
+  2026-05-27：Phase 0 T0.4 — 建立日志系统
+    - 完成：Logger.h/.cpp（spdlog封装，控制台+文件轮转日志）
+    - commit: 044d823（T0.4-0.5）
   2026-05-27：Phase 0 T0.3 — 建立配置加载层
     - 完成：config/scene.yaml、HardwareConfig.h、SceneConfig.h/.cpp、Protocol.h
     - commit: c0dcc01（报告）/ 7f815a9（T0.2）
